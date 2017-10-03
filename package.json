@@ -1,0 +1,22 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "This is a bot with a few apis",
+  "main": "keys.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ksbains/LIRI-Bot.git"
+  },
+  "author": "Karanbir Bains",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ksbains/LIRI-Bot/issues"
+  },
+  "homepage": "https://github.com/ksbains/LIRI-Bot#readme",
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}
