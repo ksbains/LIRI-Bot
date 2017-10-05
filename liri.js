@@ -13,6 +13,9 @@ var spotify = new Spotify({
   id: "b1adb519b7d94a65ba45fab2d8e0acd0",
   secret: "ad55a14b45164bfbac0c9da2499f5d60"
 });
+//OMDB api
+var request = require('request');
+
 //Input Variables
 var action = process.argv[2];
 var value = process.argv[3];
@@ -20,21 +23,25 @@ var value = process.argv[3];
 function readAll(arr, start){
 	var movieName = "";
 	for(var i = start; i < arr.length; i++){
-		movieName = movieName + " " + arr[i];
+		if(i === start){
+		movieName = movieName + arr[i];
+		}else{movieName = movieName + " " + arr[i];}
 	}
 	return movieName;
 }
 
-function toQueryString(value) {
+function toQueryString(search) {
 	var queryString = {
-	    t: value,
+	    t: search,
 	    type: "movie",
-	    r: "JSON"
+	    //r: "JSON",
+	    plot:"short",
+	    apikey:"40e9cece&"
 	};
-    var baseUrl = "http://www.omdbapi.com/?apikey=40e9cece&"
+    var baseUrl = "http://www.omdbapi.com/?"
     var qString = '';
     for (var i in queryString) {
-        qString += '&' + i + '=' + this.queryString[i];
+        qString += '&' + i + '=' + queryString[i];
     }
     return baseUrl + qString.trim('&');
 };
@@ -59,6 +66,10 @@ switch(action){
 		//spotify stuff
 		console.log("You have selected the spotify option");
 		value = readAll(process.argv, 3);
+		if(value.length ===0){
+			console.log("the value you enterd is not valid, defaut search activated");
+			value = "The Sign";
+		}
 		console.log("the song you entered is: " + value);
 		spotify.search({ type: 'track', query: value }, function(err, data) {
 		if (err) {
@@ -76,8 +87,30 @@ switch(action){
 		break;
 
 	case "movie-this":
-		//movie stuff
 		console.log("You have selected the movie option");
+		value = readAll(process.argv, 3);
+		if(value.length ===0){
+			console.log("the value you enterd is not valid, defaut search activated");
+			value = "Mr. Nobody";
+		}
+		console.log("the movie you entered is: " + value);
+		request(toQueryString(value).trim(), function(error, response, body) {
+		//console.log("The url is: " + toQueryString(readAll(process.argv, 3)).trim());
+		// If the request was successful...
+			if (!error && response.statusCode === 200) {
+			    // Then log the body from the site!
+			    console.log("The Title is: " + JSON.parse(body).Title);
+			    console.log("The Year is: " + JSON.parse(body).Year);
+			   	console.log("The movie's IMDB rating is: " + JSON.parse(body).imdbRating);
+			   	console.log("The " + JSON.parse(body).Ratings[0].Source + " Rating is: " + JSON.parse(body).Ratings[0].Value);
+			   	console.log("The Country is: " + JSON.parse(body).Country);
+			   	console.log("The Language is: " + JSON.parse(body).Language);
+			   	console.log("The Plot is: " + JSON.parse(body).Plot);
+			   	console.log("The Actors are: " + JSON.parse(body).Actors);
+		  	}else{
+		  		console.log(error);
+		  }
+		});
 		break;
 	case "do-what-it-says":
 		//do stuff
