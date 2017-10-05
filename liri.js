@@ -41,16 +41,17 @@ function toQueryString(value) {
 
 switch(action){
 	case "my-tweets":
-		console.log("You have selected the twitter option");
+		//console.log("You have selected the twitter option");
 		// This will show your last 20 tweets and when they were created at in your terminal/bash window.
 		var params = {screen_name: 'kingbainz'};
 		client.get('statuses/user_timeline', params, function(error, tweets, response){
 		  if (!error){
-		    console.log(tweets);
 		    for(var i = 0; i <tweets.length; i++){
-		    	//console.log(tweets[i].text)
+		    	console.log("Created at: " + tweets[i].created_at);
+		    	console.log("Tweet: " + tweets[i].text)
+		    	console.log("");
 		    }
-		  }
+		  }else{console.log(error)}
 		});
 		break;
 
@@ -58,21 +59,20 @@ switch(action){
 		//spotify stuff
 		console.log("You have selected the spotify option");
 		value = readAll(process.argv, 3);
-		console.log("the song you have selected is: " + value);
-		spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-		  if (err) {
-		    return console.log('Error occurred: ' + err);
-		  } 
-		console.log(data); 
-			console.log(data.tracks.items[0]);
-			//.album.artist[0].name);
+		console.log("the song you entered is: " + value);
+		spotify.search({ type: 'track', query: value }, function(err, data) {
+		if (err) {
+			return console.log('Error occurred: ' + err);
+		} 
+		console.log("The artist is: ");
+		console.log(data.tracks.items[0].album.artists[0].name);
+		console.log("The song's name is: ");
+		console.log(data.tracks.items[0].name);
+		console.log("The album is: ");
+		console.log(data.tracks.items[0].album.name);
+		console.log("The link is: ")
+		console.log(data.tracks.items[0].external_urls.spotify);	
 		});
-
-		// need to console log 
-		// Artist(s)
-		// The song's name
-		// A preview link of the song from Spotify
-		// The album that the song is from
 		break;
 
 	case "movie-this":
