@@ -109,11 +109,17 @@ function main(arr, start, isFirst){
 				    console.log("The Title is: " + JSON.parse(body).Title);
 				    console.log("The Year is: " + JSON.parse(body).Year);
 				   	console.log("The movie's IMDB rating is: " + JSON.parse(body).imdbRating);
-				   	console.log("The " + JSON.parse(body).Ratings[0].Source + " Rating is: " + JSON.parse(body).Ratings[0].Value);
+				   	JSON.parse(body).Ratings.forEach(function (e) {
+				   		//
+				   		if(e.Source === "Rotten Tomatoes"){
+				   			console.log("The " + e.Source + " Rating is " + e.Value);	
+				   		}
+				   	})
 				   	console.log("The Country is: " + JSON.parse(body).Country);
 				   	console.log("The Language is: " + JSON.parse(body).Language);
 				   	console.log("The Plot is: " + JSON.parse(body).Plot);
 				   	console.log("The Actors are: " + JSON.parse(body).Actors);
+
 			  	}else{
 			  		console.log(error);
 			  }
